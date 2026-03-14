@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vert & Co – Espaces verts & Aménagement paysager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --green:       #4CAF50;
+      --green-dark:  #388E3C;
+      --green-light: #C8E6C9;
+      --brown:       #A67C52;
+      --white:       #FFFFFF;
+      --off-white:   #F7F6F2;
+      --gray-light:  #F0EFEB;
+      --gray:        #9E9E9E;
+      --dark:        #1A1A1A;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body:    'Montserrat', sans-serif;
+      --shadow-sm:  0 2px 12px rgba(0,0,0,0.07);
+      --shadow-md:  0 6px 30px rgba(0,0,0,0.11);
+      --shadow-lg:  0 16px 60px rgba(0,0,0,0.15);
+      --radius:     12px;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: var(--font-body); color: var(--dark); background: var(--white); overflow-x: hidden; line-height: 1.7; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    .container { width: min(1160px, 92%); margin: 0 auto; }
+    .section-tag { display: inline-block; font-family: var(--font-body); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); border: 1.5px solid var(--green-light); background: rgba(76,175,80,0.07); padding: 5px 14px; border-radius: 50px; margin-bottom: 16px; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2rem,4vw,3rem); font-weight: 700; line-height: 1.15; color: var(--dark); }
+    .section-title span { color: var(--green); }
+    .section-subtitle { font-size: 0.95rem; color: var(--gray); max-width: 560px; margin-top: 14px; font-weight: 400; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 50px; font-family: var(--font-body); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; border: none; transition: var(--transition); }
+    .btn-primary { background: var(--green); color: var(--white); box-shadow: 0 4px 20px rgba(76,175,80,0.35); }
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(76,175,80,0.45); }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.7); }
+    .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: var(--white); }
+
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* NAVBAR */
+    #navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 22px 0; transition: background var(--transition), padding var(--transition), box-shadow var(--transition); }
+    #navbar.scrolled { background: rgba(255,255,255,0.97); padding: 14px 0; box-shadow: var(--shadow-sm); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--white); transition: color var(--transition); display: flex; align-items: center; gap: 6px; }
+    .logo .leaf { color: var(--green); font-size: 1.5rem; }
+    #navbar.scrolled .logo { color: var(--dark); }
+    .nav-links { display: flex; gap: 34px; align-items: center; }
+    .nav-links a { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.9); position: relative; transition: color var(--transition); }
+    #navbar.scrolled .nav-links a { color: var(--dark); }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--green); transition: width var(--transition); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { color: var(--green) !important; }
+    .nav-cta { background: var(--green); color: var(--white) !important; padding: 9px 22px; border-radius: 50px; font-size: 0.8rem !important; font-weight: 600 !important; }
+    .nav-cta:hover { background: var(--green-dark) !important; transform: translateY(-2px); }
+    .nav-cta::after { display: none !important; }
+    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .burger span { display: block; width: 26px; height: 2px; background: var(--white); border-radius: 2px; transition: var(--transition); }
+    #navbar.scrolled .burger span { background: var(--dark); }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--dark); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 36px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--white); transition: color var(--transition); }
+    .mobile-menu a:hover { color: var(--green); }
+    .mobile-close { position: absolute; top: 22px; right: 24px; font-size: 2rem; color: var(--white); cursor: pointer; }
+
+    /* HERO */
+    #hero { position: relative; height: 100vh; min-height: 640px; display: flex; align-items: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&auto=format&fit=crop&q=80'); background-size: cover; background-position: center; transform: scale(1.06); transition: transform 8s ease-out; }
+    .hero-bg.loaded { transform: scale(1); }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,25,10,0.65) 0%, rgba(10,40,10,0.40) 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 720px; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(76,175,80,0.18); border: 1px solid rgba(76,175,80,0.5); color: var(--green-light); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; padding: 6px 16px; border-radius: 50px; margin-bottom: 28px; animation: fadeDown 0.8s ease both; }
+    .hero-badge i { color: var(--green); }
+    .hero-title { font-family: var(--font-display); font-size: clamp(2.8rem,6vw,5.2rem); font-weight: 700; color: var(--white); line-height: 1.08; margin-bottom: 22px; animation: fadeUp 0.9s 0.15s ease both; }
+    .hero-title em { font-style: italic; color: #8BC34A; }
+    .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.82); font-weight: 300; max-width: 480px; margin-bottom: 42px; animation: fadeUp 0.9s 0.3s ease both; }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp 0.9s 0.45s ease both; }
+    .hero-scroll { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,0.6); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; animation: fadeUp 1s 0.9s ease both; }
+    .hero-scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.5)); animation: scrollLine 2s 1.5s ease-in-out infinite; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scrollLine { 0% { opacity: 0; transform: scaleY(0); transform-origin: top; } 50% { opacity: 1; } 100% { opacity: 0; transform: scaleY(1); transform-origin: top; } }
+
+    /* STATS */
+    .stats-bar { background: var(--dark); padding: 30px 0; }
+    .stats-inner { display: flex; justify-content: space-around; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .stat-item { text-align: center; color: var(--white); }
+    .stat-number { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; color: var(--green); line-height: 1; }
+    .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.55); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
+    .stat-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.12); }
+
+    /* À PROPOS */
+    #apropos { padding: 110px 0; background: var(--white); }
+    .apropos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+    .apropos-img-wrap { position: relative; }
+    .apropos-img-main { width: 100%; height: 480px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+    .apropos-img-badge { position: absolute; bottom: -24px; right: -24px; background: var(--green); color: var(--white); border-radius: var(--radius); padding: 22px 26px; box-shadow: var(--shadow-md); text-align: center; }
+    .apropos-img-badge .big { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; }
+    .apropos-img-badge .small { font-size: 0.78rem; font-weight: 500; opacity: 0.9; }
+    .apropos-features { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
+    .apropos-feature { display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: var(--gray-light); border-radius: 10px; transition: var(--transition); }
+    .apropos-feature:hover { background: var(--green-light); transform: translateY(-2px); }
+    .apropos-feature i { color: var(--green); font-size: 1.1rem; margin-top: 2px; flex-shrink: 0; }
+    .apropos-feature h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 2px; }
+    .apropos-feature p { font-size: 0.78rem; color: var(--gray); }
+
+    /* SERVICES */
+    #services { padding: 110px 0; background: var(--off-white); position: relative; overflow: hidden; }
+    #services::before { content: 'SERVICES'; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); font-family: var(--font-display); font-size: 9rem; font-weight: 700; color: rgba(76,175,80,0.05); white-space: nowrap; pointer-events: none; }
+    .services-header { text-align: center; margin-bottom: 60px; }
+    .services-header .section-subtitle { margin: 14px auto 0; }
+    .services-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .service-card { background: var(--white); border-radius: var(--radius); padding: 38px 28px; box-shadow: var(--shadow-sm); transition: var(--transition); position: relative; overflow: hidden; cursor: default; }
+    .service-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--green), #8BC34A); transform: scaleX(0); transform-origin: left; transition: transform var(--transition); }
+    .service-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-md); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon { width: 60px; height: 60px; background: linear-gradient(135deg, var(--green-light), rgba(76,175,80,0.15)); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 22px; transition: var(--transition); }
+    .service-card:hover .service-icon { background: linear-gradient(135deg, var(--green), var(--green-dark)); }
+    .service-icon i { font-size: 1.4rem; color: var(--green); transition: color var(--transition); }
+    .service-card:hover .service-icon i { color: var(--white); }
+    .service-card h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
+    .service-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.7; }
+    .service-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; font-size: 0.8rem; font-weight: 600; color: var(--green); transition: gap var(--transition); }
+    .service-card:hover .service-link { gap: 10px; }
+
+    /* GALERIE */
+    #realisations { padding: 110px 0; background: var(--white); }
+    .realisations-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 50px; gap: 20px; flex-wrap: wrap; }
+    .gallery-filter { display: flex; gap: 10px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: 500; cursor: pointer; border: 1.5px solid var(--gray-light); background: transparent; color: var(--gray); font-family: var(--font-body); transition: var(--transition); }
+    .filter-btn.active, .filter-btn:hover { border-color: var(--green); background: var(--green); color: var(--white); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .gallery-item { position: relative; overflow: hidden; border-radius: var(--radius); cursor: pointer; transition: opacity 0.3s ease, transform 0.3s ease; }
+    .gallery-item:nth-child(1) { grid-column: span 2; }
+    .gallery-item img { width: 100%; height: 280px; object-fit: cover; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+    .gallery-item:nth-child(1) img { height: 380px; }
+    .gallery-item:hover img { transform: scale(1.07); }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,30,10,0.75) 0%, transparent 60%); opacity: 0; transition: opacity var(--transition); display: flex; flex-direction: column; justify-content: flex-end; padding: 22px; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-label { display: inline-flex; align-items: center; gap: 6px; background: var(--green); color: var(--white); font-size: 0.72rem; font-weight: 600; padding: 4px 12px; border-radius: 50px; width: fit-content; margin-bottom: 8px; }
+    .gallery-title-text { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--white); }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; align-items: center; justify-content: center; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 8px; }
+    .lightbox-close { position: absolute; top: 20px; right: 28px; font-size: 2.5rem; color: var(--white); cursor: pointer; line-height: 1; }
+
+    /* TÉMOIGNAGES */
+    #temoignages { padding: 110px 0; background: linear-gradient(135deg, #1A2E1A 0%, #0F1F0F 100%); position: relative; overflow: hidden; }
+    #temoignages::before { content: ''; position: absolute; top: -120px; right: -120px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(76,175,80,0.12) 0%, transparent 70%); pointer-events: none; }
+    .temoignages-header { text-align: center; margin-bottom: 60px; }
+    .temoignages-header .section-title { color: var(--white); }
+    .temoignages-header .section-subtitle { color: rgba(255,255,255,0.55); margin: 14px auto 0; }
+    .temoignages-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .temoignage-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: var(--radius); padding: 36px 30px; backdrop-filter: blur(10px); transition: var(--transition); }
+    .temoignage-card:hover { background: rgba(255,255,255,0.09); transform: translateY(-6px); border-color: rgba(76,175,80,0.3); }
+    .quote-icon { font-size: 3.5rem; font-family: Georgia, serif; color: var(--green); line-height: 0.7; margin-bottom: 20px; }
+    .stars { display: flex; gap: 3px; margin-bottom: 16px; }
+    .stars i { color: #FFD700; font-size: 0.85rem; }
+    .temoignage-card p { font-size: 0.9rem; color: rgba(255,255,255,0.75); line-height: 1.75; font-style: italic; margin-bottom: 28px; }
+    .temoignage-author { display: flex; align-items: center; gap: 14px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+    .author-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--green); flex-shrink: 0; }
+    .author-name { font-weight: 600; font-size: 0.9rem; color: var(--white); }
+    .author-role { font-size: 0.76rem; color: rgba(255,255,255,0.45); }
+
+    /* CONTACT */
+    #contact { padding: 110px 0; background: var(--off-white); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 70px; align-items: start; }
+    .contact-items { display: flex; flex-direction: column; gap: 22px; }
+    .contact-item { display: flex; align-items: flex-start; gap: 16px; }
+    .contact-item-icon { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--green-light), rgba(76,175,80,0.2)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contact-item-icon i { color: var(--green); font-size: 1.1rem; }
+    .contact-item-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 2px; }
+    .contact-item-value { font-size: 0.92rem; font-weight: 500; color: var(--dark); }
+    .contact-socials { display: flex; gap: 12px; margin-top: 36px; }
+    .social-btn { width: 42px; height: 42px; border-radius: 10px; background: var(--white); border: 1.5px solid var(--gray-light); display: flex; align-items: center; justify-content: center; color: var(--dark); font-size: 1rem; transition: var(--transition); }
+    .social-btn:hover { background: var(--green); border-color: var(--green); color: var(--white); transform: translateY(-3px); }
+    .contact-form { background: var(--white); border-radius: 18px; padding: 48px 42px; box-shadow: var(--shadow-md); }
+    .contact-form h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; margin-bottom: 28px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--dark); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 13px 16px; border: 1.5px solid #E5E5E0; border-radius: 10px; font-family: var(--font-body); font-size: 0.9rem; color: var(--dark); background: var(--off-white); transition: border-color var(--transition), box-shadow var(--transition); outline: none; resize: none; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(76,175,80,0.12); background: var(--white); }
+    .form-group textarea { height: 120px; }
+    .form-submit { width: 100%; padding: 16px; border-radius: 50px; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; letter-spacing: 0.04em; background: linear-gradient(135deg, var(--green), var(--green-dark)); color: var(--white); border: none; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 20px rgba(76,175,80,0.35); }
+    .form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(76,175,80,0.45); }
+    .form-success { display: none; text-align: center; padding: 30px; }
+    .form-success i { font-size: 3rem; color: var(--green); margin-bottom: 12px; display: block; }
+    .form-success h4 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 8px; }
+    .form-success p { color: var(--gray); font-size: 0.9rem; }
+
+    /* FOOTER */
+    footer { background: var(--dark); padding: 72px 0 0; color: rgba(255,255,255,0.7); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 50px; padding-bottom: 50px; }
+    .footer-brand .logo { color: var(--white); margin-bottom: 18px; }
+    .footer-brand p { font-size: 0.85rem; line-height: 1.75; color: rgba(255,255,255,0.5); max-width: 260px; }
+    .footer-socials { display: flex; gap: 10px; margin-top: 24px; }
+    .footer-social { width: 38px; height: 38px; border-radius: 8px; background: rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); font-size: 0.95rem; transition: var(--transition); }
+    .footer-social:hover { background: var(--green); color: var(--white); }
+    .footer-col h4 { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--white); margin-bottom: 20px; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul li a { font-size: 0.85rem; color: rgba(255,255,255,0.5); transition: color var(--transition); }
+    .footer-col ul li a:hover { color: var(--green); }
+    .footer-contact-item { display: flex; align-items: flex-start; gap: 12px; font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-bottom: 14px; }
+    .footer-contact-item i { color: var(--green); margin-top: 2px; flex-shrink: 0; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding: 22px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 0.8rem; color: rgba(255,255,255,0.35); }
+    .footer-bottom a { color: rgba(255,255,255,0.35); transition: color var(--transition); }
+    .footer-bottom a:hover { color: var(--green); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) { .services-grid { grid-template-columns: repeat(2,1fr); } .temoignages-grid { grid-template-columns: 1fr 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 860px) { .apropos-grid { grid-template-columns: 1fr; gap: 50px; } .apropos-img-badge { right: 0; } .gallery-grid { grid-template-columns: 1fr 1fr; } .gallery-item:nth-child(1) { grid-column: span 2; } .contact-grid { grid-template-columns: 1fr; } .nav-links { display: none; } .burger { display: flex; } }
+    @media (max-width: 640px) { .services-grid { grid-template-columns: 1fr; } .temoignages-grid { grid-template-columns: 1fr; } .gallery-grid { grid-template-columns: 1fr; } .gallery-item:nth-child(1) { grid-column: span 1; } .footer-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } .contact-form { padding: 32px 24px; } .stats-inner { gap: 12px; } .stat-divider { display: none; } .apropos-features { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <span class="mobile-close" id="mobileClose"><i class="fa fa-times"></i></span>
+    <a href="#accueil"      onclick="closeMobile()">Accueil</a>
+    <a href="#apropos"      onclick="closeMobile()">À propos</a>
+    <a href="#services"     onclick="closeMobile()">Services</a>
+    <a href="#realisations" onclick="closeMobile()">Réalisations</a>
+    <a href="#temoignages"  onclick="closeMobile()">Témoignages</a>
+    <a href="#contact"      onclick="closeMobile()">Contact</a>
+  </div>
+
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="#accueil" class="logo"><span class="leaf"><i class="fa-solid fa-leaf"></i></span> Vert & Co</a>
+      <ul class="nav-links">
+        <li><a href="#accueil">Accueil</a></li>
+        <li><a href="#apropos">À propos</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#realisations">Réalisations</a></li>
+        <li><a href="#temoignages">Témoignages</a></li>
+        <li><a href="#contact" class="nav-cta">Devis gratuit</a></li>
+      </ul>
+      <div class="burger" id="burger" onclick="toggleMobile()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <section id="accueil">
+    <div id="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge"><i class="fa-solid fa-seedling"></i> Spécialistes des espaces verts depuis 2010</div>
+          <h1 class="hero-title">Transformez votre<br />extérieur en un<br /><em>espace unique</em></h1>
+          <p class="hero-sub">Entretien, aménagement, création — Vert & Co donne vie à vos jardins avec expertise et respect de l'environnement.</p>
+          <div class="hero-buttons">
+            <a href="#contact" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Demander un devis</a>
+            <a href="#services" class="btn btn-outline"><i class="fa-solid fa-arrow-down"></i> Nos services</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll"><span>Découvrir</span><div class="hero-scroll-line"></div></div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats-inner">
+        <div class="stat-item reveal"><div class="stat-number" data-count="450">0</div><div class="stat-label">Jardins aménagés</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item reveal reveal-delay-1"><div class="stat-number" data-count="14">0</div><div class="stat-label">Années d'expérience</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item reveal reveal-delay-2"><div class="stat-number" data-count="98">0</div><div class="stat-label">% Clients satisfaits</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item reveal reveal-delay-3"><div class="stat-number" data-count="12">0</div><div class="stat-label">Experts dédiés</div></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="apropos">
+    <div class="container">
+      <div class="apropos-grid">
+        <div class="apropos-img-wrap reveal">
+          <img class="apropos-img-main" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&auto=format&fit=crop&q=80" alt="Équipe Vert & Co" />
+          <div class="apropos-img-badge"><div class="big">15+</div><div class="small">ans d'expertise</div></div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <span class="section-tag">À propos</span>
+          <h2 class="section-title">À propos de <span>Vert & Co</span></h2>
+          <p class="section-subtitle">Fondée par Léo Martin, Vert & Co est une entreprise passionnée par la nature et l'embellissement des espaces extérieurs. Chaque projet est unique, chaque jardin mérite notre attention absolue.</p>
+          <p style="font-size:0.9rem;color:var(--gray);margin-top:16px;line-height:1.8;">Notre approche allie <strong style="color:var(--dark)">savoir-faire traditionnel</strong> et <strong style="color:var(--dark)">méthodes écologiques modernes</strong>. Nous utilisons des produits respectueux de l'environnement et favorisons la biodiversité locale.</p>
+          <div class="apropos-features">
+            <div class="apropos-feature"><i class="fa-solid fa-award"></i><div><h4>Expertise reconnue</h4><p>Certifiés et formés aux dernières techniques paysagères.</p></div></div>
+            <div class="apropos-feature"><i class="fa-solid fa-leaf"></i><div><h4>Éco-responsable</h4><p>Produits biologiques et pratiques respectueuses.</p></div></div>
+            <div class="apropos-feature"><i class="fa-solid fa-clock"></i><div><h4>Réactivité</h4><p>Intervention rapide et respect des délais.</p></div></div>
+            <div class="apropos-feature"><i class="fa-solid fa-shield-halved"></i><div><h4>Garantie qualité</h4><p>Satisfait ou on revient, sans condition.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-tag">Ce que nous faisons</span>
+        <h2 class="section-title">Nos <span>services</span></h2>
+        <p class="section-subtitle">De l'entretien courant à l'aménagement paysager complet, nous couvrons tous vos besoins extérieurs.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card reveal"><div class="service-icon"><i class="fa-solid fa-scissors"></i></div><h3>Entretien régulier</h3><p>Tonte, désherbage, soufflage — un suivi périodique pour un jardin toujours impeccable, quelles que soient les saisons.</p><span class="service-link">En savoir plus <i class="fa-solid fa-arrow-right"></i></span></div>
+        <div class="service-card reveal reveal-delay-1"><div class="service-icon"><i class="fa-solid fa-mountain-sun"></i></div><h3>Aménagement paysager</h3><p>Conception et réalisation de jardins sur mesure : allées, terrasses, massifs floraux et bassins paysagers.</p><span class="service-link">En savoir plus <i class="fa-solid fa-arrow-right"></i></span></div>
+        <div class="service-card reveal reveal-delay-2"><div class="service-icon"><i class="fa-solid fa-tree"></i></div><h3>Taille & élagage</h3><p>Taille de haies, d'arbustes et élagage d'arbres réalisés avec précision pour une croissance saine et harmonieuse.</p><span class="service-link">En savoir plus <i class="fa-solid fa-arrow-right"></i></span></div>
+        <div class="service-card reveal reveal-delay-3"><div class="service-icon"><i class="fa-solid fa-seedling"></i></div><h3>Tonte & plantations</h3><p>Gazon nickel et sélection de plantes adaptées à votre sol et à vos envies pour un jardin vivant et coloré.</p><span class="service-link">En savoir plus <i class="fa-solid fa-arrow-right"></i></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="realisations">
+    <div class="container">
+      <div class="realisations-header">
+        <div><span class="section-tag">Portfolio</span><h2 class="section-title">Nos <span>réalisations</span></h2></div>
+        <div class="gallery-filter">
+          <button class="filter-btn active">Tous</button>
+          <button class="filter-btn">Jardins</button>
+          <button class="filter-btn">Terrasses</button>
+          <button class="filter-btn">Avant/Après</button>
+        </div>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item reveal" data-category="jardins" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1000&auto=format&fit=crop&q=80" alt="Jardin contemporain" />
+          <div class="gallery-overlay"><span class="gallery-label"><i class="fa-solid fa-star"></i> Réalisation phare</span><span class="gallery-title-text">Jardin contemporain – Lyon</span></div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-1" data-category="jardins" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&auto=format&fit=crop&q=80" alt="Parc résidentiel" />
+          <div class="gallery-overlay"><span class="gallery-label"><i class="fa-solid fa-leaf"></i> Entretien</span><span class="gallery-title-text">Parc résidentiel – Bordeaux</span></div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-1" data-category="terrasses" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&auto=format&fit=crop&q=80" alt="Terrasse bois" />
+          <div class="gallery-overlay"><span class="gallery-label"><i class="fa-solid fa-sun"></i> Terrasse</span><span class="gallery-title-text">Terrasse bois – Paris</span></div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-2" data-category="avant-apres" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=600&auto=format&fit=crop&q=80" alt="Massifs floraux" />
+          <div class="gallery-overlay"><span class="gallery-label"><i class="fa-solid fa-arrows-left-right"></i> Avant / Après</span><span class="gallery-title-text">Massifs floraux – Nantes</span></div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-2" data-category="avant-apres" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=600&auto=format&fit=crop&q=80" alt="Haies géométriques" />
+          <div class="gallery-overlay"><span class="gallery-label"><i class="fa-solid fa-arrows-left-right"></i> Avant / Après</span><span class="gallery-title-text">Haies géométriques – Rennes</span></div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-3" data-category="terrasses" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80" alt="Cadre naturel" />
+          <div class="gallery-overlay"><span class="gallery-label"><i class="fa-solid fa-mountain-sun"></i> Paysagisme</span><span class="gallery-title-text">Cadre naturel – Toulouse</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img src="" alt="Vue agrandie" id="lightboxImg" />
+  </div>
+
+  <section id="temoignages">
+    <div class="container">
+      <div class="temoignages-header">
+        <span class="section-tag" style="background:rgba(76,175,80,0.15);border-color:rgba(76,175,80,0.3);color:#8BC34A;">Avis clients</span>
+        <h2 class="section-title">Ce que disent <span>nos clients</span></h2>
+        <p class="section-subtitle">La satisfaction de nos clients est notre meilleure récompense.</p>
+      </div>
+      <div class="temoignages-grid">
+        <div class="temoignage-card reveal">
+          <div class="quote-icon">"</div>
+          <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p>Travail impeccable, notre jardin n'a jamais été aussi beau. L'équipe est à l'écoute, ponctuelle et vraiment passionnée. Je recommande les yeux fermés !</p>
+          <div class="temoignage-author"><img class="author-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Marie Dubois" /><div><div class="author-name">Marie Dubois</div><div class="author-role">Particulière, Lyon</div></div></div>
+        </div>
+        <div class="temoignage-card reveal reveal-delay-1">
+          <div class="quote-icon">"</div>
+          <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p>Équipe très professionnelle et rapide. Ils ont transformé notre cour d'entreprise en un véritable écrin de verdure.</p>
+          <div class="temoignage-author"><img class="author-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Thomas Leroy" /><div><div class="author-name">Thomas Leroy</div><div class="author-role">Directeur, PME Bordeaux</div></div></div>
+        </div>
+        <div class="temoignage-card reveal reveal-delay-2">
+          <div class="quote-icon">"</div>
+          <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+          <p>Aménagement paysager magnifique, au-delà de mes attentes. Mon jardin est devenu un vrai lieu de vie que j'adore.</p>
+          <div class="temoignage-author"><img class="author-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=80" alt="Sophie Martin" /><div><div class="author-name">Sophie Martin</div><div class="author-role">Particulière, Nantes</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div>
+          <span class="section-tag">Devis gratuit</span>
+          <h2 class="section-title reveal">Demander un <span>devis</span></h2>
+          <p class="section-subtitle reveal">Décrivez-nous votre projet et nous vous répondons sous 24h. Notre visite de diagnostic est offerte et sans engagement.</p>
+          <div class="contact-items" style="margin-top:36px;">
+            <div class="contact-item reveal"><div class="contact-item-icon"><i class="fa-solid fa-envelope"></i></div><div><div class="contact-item-label">Email</div><div class="contact-item-value">contact@vert-co.fr</div></div></div>
+            <div class="contact-item reveal"><div class="contact-item-icon"><i class="fa-solid fa-phone"></i></div><div><div class="contact-item-label">Téléphone</div><div class="contact-item-value">+33 4 56 78 90 12</div></div></div>
+            <div class="contact-item reveal"><div class="contact-item-icon"><i class="fa-solid fa-location-dot"></i></div><div><div class="contact-item-label">Adresse</div><div class="contact-item-value">12 avenue des Jardins, 69001 Lyon</div></div></div>
+            <div class="contact-item reveal"><div class="contact-item-icon"><i class="fa-solid fa-clock"></i></div><div><div class="contact-item-label">Horaires</div><div class="contact-item-value">Lun – Sam : 8h00 – 18h00</div></div></div>
+          </div>
+          <div class="contact-socials">
+            <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+
+        <div class="contact-form reveal">
+          <h3>Votre demande</h3>
+          <div id="formContent">
+            <form id="devisForm" action="https://formspree.io/f/maqpdnqz" method="POST">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="fname">Prénom & Nom</label>
+                  <input type="text" id="fname" name="nom" placeholder="Jean Dupont" required />
+                </div>
+                <div class="form-group">
+                  <label for="femail">Email</label>
+                  <input type="email" id="femail" name="email" placeholder="jean@exemple.fr" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="fphone">Téléphone</label>
+                <input type="tel" id="fphone" name="telephone" placeholder="06 12 34 56 78" />
+              </div>
+              <div class="form-group">
+                <label for="fmessage">Votre projet</label>
+                <textarea id="fmessage" name="message" placeholder="Décrivez votre jardin et vos besoins…" required></textarea>
+              </div>
+              <button type="submit" class="form-submit">
+                <i class="fa-solid fa-paper-plane"></i>
+                Envoyer ma demande
+              </button>
+            </form>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <i class="fa-solid fa-circle-check"></i>
+            <h4>Demande envoyée !</h4>
+            <p>Merci ! Nous reviendrons vers vous sous 24h pour organiser votre visite diagnostic gratuite.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#accueil" class="logo"><span class="leaf"><i class="fa-solid fa-leaf"></i></span> Vert & Co</a>
+          <p>Spécialistes de l'entretien et de l'aménagement des espaces verts depuis 2010. Nous rendons chaque jardin exceptionnel.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="footer-social"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#apropos">À propos</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#realisations">Réalisations</a></li>
+            <li><a href="#temoignages">Témoignages</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#services">Entretien de jardin</a></li>
+            <li><a href="#services">Aménagement paysager</a></li>
+            <li><a href="#services">Taille & élagage</a></li>
+            <li><a href="#services">Tonte & plantations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i><span>12 avenue des Jardins<br />69001 Lyon, France</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-phone"></i><span>+33 4 56 78 90 12</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><span>contact@vert-co.fr</span></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 Vert & Co – Tous droits réservés</p>
+        <a href="#">Mentions légales</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 60));
+
+    // Hero
+    window.addEventListener('load', () => document.getElementById('heroBg').classList.add('loaded'));
+
+    // Mobile menu
+    function toggleMobile() { document.getElementById('mobileMenu').classList.toggle('open'); document.getElementById('burger').classList.toggle('open'); }
+    function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); document.getElementById('burger').classList.remove('open'); }
+    document.getElementById('mobileClose').addEventListener('click', closeMobile);
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Counters
+    const cObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); cObs.unobserve(e.target); } });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-count]').forEach(el => cObs.observe(el));
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.count), start = Date.now();
+      const run = () => {
+        const p = Math.min((Date.now()-start)/1800,1), val = Math.floor((1-Math.pow(1-p,3))*target);
+        el.textContent = val;
+        if (p < 1) requestAnimationFrame(run);
+        else el.textContent = target + (el.dataset.count == 98 ? '%' : '+');
+      };
+      requestAnimationFrame(run);
+    }
+
+    // Gallery filter
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.textContent.trim().toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+          .replace('avant/apres','avant-apres').replace(/\s/g,'');
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          const cat = item.dataset.category;
+          if (filter === 'tous' || cat === filter) {
+            item.style.display = 'block';
+            setTimeout(() => { item.style.opacity='1'; item.style.transform='scale(1)'; }, 10);
+          } else {
+            item.style.opacity = '0'; item.style.transform = 'scale(0.95)';
+            setTimeout(() => { if (item.style.opacity==='0') item.style.display='none'; }, 300);
+          }
+        });
+      });
+    });
+
+    // Lightbox
+    function openLightbox(item) { document.getElementById('lightboxImg').src = item.querySelector('img').src; document.getElementById('lightbox').classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow=''; }
+    document.getElementById('lightbox').addEventListener('click', function(e) { if (e.target===this) closeLightbox(); });
+
+    // Formspree
+    document.getElementById('devisForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.form-submit');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Envoi en cours...';
+      btn.disabled = true;
+      const response = await fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        document.getElementById('formContent').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Envoyer ma demande';
+        btn.disabled = false;
+        alert('Une erreur est survenue, veuillez réessayer.');
+      }
+    });
+  </script>
+</body>
+</html>
